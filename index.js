@@ -55,9 +55,7 @@ const getDataList = () => {
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
-    "x-requested-with": "XMLHttpRequest",
-    "cookie": "_uab_collina=175566143496125733153601; JSESSIONID=55FF9F74F87EADB612E6A0C40B5F1EB2; _jc_save_fromStation=%u5E7F%u5DDE%2CGZQ; _jc_save_toStation=%u5357%u6C5F%u53E3%2CNDQ; _jc_save_wfdc_flag=dc; BIGipServerotn=1524171018.50210.0000; BIGipServerpassport=971505930.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromDate=2025-09-30; _jc_save_toDate=2025-09-16",
-    "Referer": "https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=%E5%B9%BF%E5%B7%9E,GZQ&ts=%E5%8D%97%E6%B1%9F%E5%8F%A3,NDQ&date=2025-09-30&flag=N,N,Y"
+    "x-requested-with": "XMLHttpRequest"
   },
   };
   // 发送请求
@@ -89,7 +87,7 @@ const getDataList = () => {
         console.log('-----------------------')
         console.log('-----------------------')
         console.log(`初始化获取班次总数：${initLength}`);
-        console.log(`初始化待发售班次：${zantingList}`);
+        console.log(`初始化获取待发售班次：${zantingList}`);
         console.log('-----------------------')
         console.log('-----------------------')
         console.log('-----------------------')
