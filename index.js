@@ -63,43 +63,47 @@ const getDataList = () => {
     .then(function (response) {
       const resData = response.data.data;
       // console.log(resData.result);
-      const resultList = resData.result;
-      const canStart = resultList.some((x) => {
-        let a = x.includes("有");
-        if (zantingList.length > 0) {
-          const checi = getCheci(x);
-          if (zantingList.includes(checi)) {
-            if (!x.includes("暂停发售")) {
-              a = true;
+      const resultList = resData?.result;
+      if (resultList) {
+        const canStart = resultList.some((x) => {
+          let a = x.includes("有");
+          if (zantingList.length > 0) {
+            const checi = getCheci(x);
+            if (zantingList.includes(checi)) {
+              if (!x.includes("暂停发售")) {
+                a = true;
+              }
             }
           }
-        }
-        return a;
-      });
-      if (initLength === 0) {
-        initLength = resultList.length;
-        resultList.forEach((x) => {
-          if (x.includes("暂停发售")) {
-            zantingList.push(getCheci(x));
-          }
+          return a;
         });
-        console.log('-----------------------')
-        console.log('-----------------------')
-        console.log('-----------------------')
-        console.log(`初始化获取班次总数：${initLength}`);
-        console.log(`初始化获取待发售班次：${zantingList}`);
-        console.log('-----------------------')
-        console.log('-----------------------')
-        console.log('-----------------------')
-      }
-      
-      console.log(
-        `时间：${formatDate(Date.now())} | 当前班次总数：${resultList.length}`
-      );
-
-      console.log("是否开售：", canStart ? "是" : "否");
-      if (initLength > 0 && (canStart || resultList.length > initLength)) {
-        wxpusher.sendMessage("广州-南江口9月30号新增加班车");
+        if (initLength === 0) {
+          initLength = resultList.length;
+          resultList.forEach((x) => {
+            if (x.includes("暂停发售")) {
+              zantingList.push(getCheci(x));
+            }
+          });
+          console.log('-----------------------')
+          console.log('-----------------------')
+          console.log('-----------------------')
+          console.log(`初始化获取班次总数：${initLength}`);
+          console.log(`初始化获取待发售班次：${zantingList}`);
+          console.log('-----------------------')
+          console.log('-----------------------')
+          console.log('-----------------------')
+        }
+        
+        console.log(
+          `时间：${formatDate(Date.now())} | 当前班次总数：${resultList.length}`
+        );
+        
+        console.log("是否开售：", canStart ? "是" : "否");
+        if (initLength > 0 && (canStart || resultList.length > initLength)) {
+          wxpusher.sendMessage("广州-南江口9月30号新增加班车");
+        }
+      } else {
+        wxpusher.sendMessage("12306脚本异常");
       }
       clearConsole();
     })
