@@ -1,6 +1,7 @@
 const axios = require("axios");
 const schedule = require("node-schedule");
 const wxpusher = require("./wxpusher/index");
+const baseConfig = require('./config.js')
 
 const zero = (n) => {
   return n > 9 ? n : `0${n}`;
@@ -42,8 +43,7 @@ const getCheci = (str) => {
 const getDataList = () => {
   const config = {
     method: "get",
-    // url: "https://kyfw.12306.cn/otn/leftTicket/queryG?leftTicketDTO.train_date=2025-02-10&leftTicketDTO.from_station=GZQ&leftTicketDTO.to_station=NDQ&purpose_codes=ADULT",
-    url: "https://kyfw.12306.cn/otn/leftTicket/queryG?leftTicketDTO.train_date=2025-09-30&leftTicketDTO.from_station=GZQ&leftTicketDTO.to_station=NDQ&purpose_codes=ADULT", // 目标URL
+    url: `https://kyfw.12306.cn/otn/leftTicket/queryG?leftTicketDTO.train_date=${baseConfig.date}&leftTicketDTO.from_station=${baseConfig.start_station.code}&leftTicketDTO.to_station=${baseConfig.end_station.code}&purpose_codes=ADULT`, // 目标URL
     headers: {
     "accept": "*/*",
     "accept-language": "zh-CN,zh;q=0.9",
@@ -100,10 +100,8 @@ const getDataList = () => {
         
         console.log("是否开售：", canStart ? "是" : "否");
         if (initLength > 0 && (canStart || resultList.length > initLength)) {
-          wxpusher.sendMessage("广州-南江口9月30号新增加班车");
+          wxpusher.sendMessage(`${baseConfig.start_station.name}-${baseConfig.end_station.name}, ${baseConfig.date}新增加班车`);
         }
-      } else {
-        wxpusher.sendMessage("12306脚本异常");
       }
       clearConsole();
     })
@@ -112,7 +110,7 @@ const getDataList = () => {
         // errWarning = true
         // clearInterval(timer)
         // timer = null
-        // wxpusher.sendMessage("12306接口异常");
+        wxpusher.sendMessage("12306接口异常");
       }
       console.log(error); // 打印错误信息
     });
@@ -146,8 +144,8 @@ const createTask = (hour, minute, taskFun) => {
   schedule.scheduleJob(rule, taskFun);
 };
 
-createTask("06", "00", startTask);
-createTask("23", "00", stopTask);
+createTask("06", "00", startTask); // 每天开始任务时间
+createTask("23", "00", stopTask); // 每天结束任务时间
 startTask();
 
 // wxpusher.sendMessage("南江口-广州4月6号新增加班车");
