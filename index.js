@@ -89,7 +89,7 @@ const getDataList = () => {
         console.log('-----------------------')
         console.log('-----------------------')
         console.log(`初始化获取班次总数：${initLength}`);
-        console.log(`初始化暂停班次：${zantingList}`);
+        console.log(`初始化待发售班次：${zantingList}`);
         console.log('-----------------------')
         console.log('-----------------------')
         console.log('-----------------------')
