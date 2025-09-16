@@ -31,7 +31,7 @@ const clearConsole = () => {
 };
 
 let initLength = 0;
-let zantingList = []; // 第一次运行时,存储暂停发售的班次
+let pauseList = []; // 第一次运行时, 存储暂停发售的班次
 
 const getCheci = (str) => {
   // 从加密字符串中提取班次
@@ -67,9 +67,9 @@ const getDataList = () => {
       if (resultList) {
         const canStart = resultList.some((x) => {
           let a = x.includes("有");
-          if (zantingList.length > 0) {
+          if (pauseList.length > 0) {
             const checi = getCheci(x);
-            if (zantingList.includes(checi)) {
+            if (pauseList.includes(checi)) {
               if (!x.includes("暂停发售")) {
                 a = true;
               }
@@ -81,14 +81,14 @@ const getDataList = () => {
           initLength = resultList.length;
           resultList.forEach((x) => {
             if (x.includes("暂停发售")) {
-              zantingList.push(getCheci(x));
+              pauseList.push(getCheci(x));
             }
           });
           console.log('-----------------------')
           console.log('-----------------------')
           console.log('-----------------------')
           console.log(`初始化获取班次总数：${initLength}`);
-          console.log(`初始化获取待发售班次：${zantingList}`);
+          console.log(`初始化获取待发售班次：${pauseList}`);
           console.log('-----------------------')
           console.log('-----------------------')
           console.log('-----------------------')
@@ -100,7 +100,7 @@ const getDataList = () => {
         
         console.log("是否开售：", canStart ? "是" : "否");
         if (initLength > 0 && (canStart || resultList.length > initLength)) {
-          wxpusher.sendMessage(`${baseConfig.start_station.name}-${baseConfig.end_station.name}, ${baseConfig.date}新增加班车`);
+          wxpusher.sendMessage(`${baseConfig.date}, ${baseConfig.start_station.name} 到 ${baseConfig.end_station.name}新增加班车`);
         }
       }
       clearConsole();
@@ -125,7 +125,7 @@ const startTask = () => {
   // 这里放置你的任务逻辑
   timer = setInterval(() => {
     getDataList();
-  }, 10000);
+  }, baseConfig.interfaceFreq);
 };
 const stopTask = () => {
   console.log("结束任务:");
