@@ -16,7 +16,7 @@ const formatDate = (date, hasTime = true) => {
   const second = zero(oDate.getSeconds());
   let result = `${year}-${month}-${dat}`;
   if (hasTime) {
-    result += ` ${hour}：${minute}：${second}`
+    result += ` ${hour}:${minute}:${second}`
   }
   return result
 };
