@@ -165,7 +165,7 @@ const createTask = (hour, minute, taskFun) => {
 };
 
 createTask("06", "00", startTask); // 每天开始任务时间
-createTask("09", "05", stopTask); // 每天结束任务时间
+createTask("21", "50", stopTask); // 每天结束任务时间
 startTask();
 
 // wxpusher.sendMessage("南江口-广州4月6号新增加班车");
