@@ -64,12 +64,19 @@ const getCheci = (str) => {
   return result;
 };
 const getDataList = () => {
+  const checkDate = baseConfig.date
+  const startStationName = baseConfig.start_station.name
+  const startStationCode = baseConfig.start_station.code
+  
+  const endStationName = baseConfig.end_station.name
+  const endStationCode = baseConfig.end_station.code
+  
   console.log(`-------------------------------`)
-  console.log(`查询日期：${baseConfig.date}, 行程：${baseConfig.start_station.name} 至 ${baseConfig.end_station.name}`)
+  console.log(`查询日期：${checkDate}, 行程：${startStationName} 至 ${endStationName}`)
   return new Promise((resolve, reject) => {
     const config = {
       method: "get",
-      url: `https://kyfw.12306.cn/otn/leftTicket/queryG?leftTicketDTO.train_date=${baseConfig.date}&leftTicketDTO.from_station=${baseConfig.start_station.code}&leftTicketDTO.to_station=${baseConfig.end_station.code}&purpose_codes=ADULT`, // 目标URL
+      url: `https://kyfw.12306.cn/otn/leftTicket/queryG?leftTicketDTO.train_date=${checkDate}&leftTicketDTO.from_station=${startStationCode}&leftTicketDTO.to_station=${endStationCode}&purpose_codes=ADULT`, // 目标URL
       headers: {
         "accept": "*/*",
         "accept-language": "zh-CN,zh;q=0.9",
@@ -82,8 +89,8 @@ const getDataList = () => {
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
         "x-requested-with": "XMLHttpRequest",
-        "cookie": `_uab_collina=175566143496125733153601; JSESSIONID=F6228C6D78B5167D016B2F2D4D144A12; _jc_save_toStation=${chineseToUnicode(baseConfig.end_station.name)}%2C${baseConfig.end_station.code}; _jc_save_wfdc_flag=dc; BIGipServerotn=1524171018.50210.0000; BIGipServerpassport=971505930.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=${chineseToUnicode(baseConfig.start_station.name)}%2C${baseConfig.start_station.code}; _jc_save_fromDate=${baseConfig.date}; BIGipServerpool_passport=2917335562.50215.0000; _jc_save_toDate=${formatDate('', false)}`,
-        "Referer": `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(baseConfig.start_station.name)},${baseConfig.start_station.code}&ts=${encodeURIComponent(baseConfig.end_station.name)},${baseConfig.end_station.code}&date=${baseConfig.date}&flag=N,N,Y`
+        "cookie": `_uab_collina=175566143496125733153601; JSESSIONID=F6228C6D78B5167D016B2F2D4D144A12; _jc_save_toStation=${chineseToUnicode(endStationName)}%2C${endStationCode}; _jc_save_wfdc_flag=dc; BIGipServerotn=1524171018.50210.0000; BIGipServerpassport=971505930.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=${chineseToUnicode(startStationName)}%2C${startStationCode}; _jc_save_fromDate=${checkDate}; BIGipServerpool_passport=2917335562.50215.0000; _jc_save_toDate=${formatDate('', false)}`,
+        "Referer": `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(startStationName)},${startStationCode}&ts=${encodeURIComponent(endStationName)},${endStationCode}&date=${checkDate}&flag=N,N,Y`
       },
     };
     // 发送请求
@@ -128,7 +135,7 @@ const getDataList = () => {
           
           console.log("是否开售：", canStart ? "是" : "否");
           if (initLength > 0 && (canStart || resultList.length > initLength)) {
-            wxpusher.sendMessage(`${baseConfig.date}, ${baseConfig.start_station.name} 到 ${baseConfig.end_station.name}新增加班车`);
+            wxpusher.sendMessage(`${checkDate}, ${startStationName} 到 ${endStationName}新增加班车`);
           }
         } else {
           console.error(response)
