@@ -51,7 +51,7 @@ const getCheci = (str) => {
 };
 const getDataList = () => {
   console.log(`-------------------------------`)
-  console.log('查询中....')
+  console.log(`查询日期：${baseConfig.date}, 行程：${baseConfig.start_station.name} 至 ${baseConfig.end_station.name}`)
   return new Promise((resolve, reject) => {
     const config = {
       method: "get",
