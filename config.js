@@ -10,6 +10,5 @@ module.exports = {
   end_station: { // 到达地信息
     name: '南江口',
     code: 'NDQ'
-  },
-  interfaceFreq: 10000 // 接口调用频率，默认10秒，太频繁可能会触发接口异常
+  }
 }

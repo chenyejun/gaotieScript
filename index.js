@@ -17,6 +17,11 @@ const formatDate = (date) => {
   return `${year}-${month}-${dat} ${hour}：${minute}：${second}`;
 };
 
+// 自定义范围随机数
+export const randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
 let errWarning = false;
 let timer = null;
 
@@ -123,9 +128,10 @@ const startTask = () => {
   console.log("开始任务:");
   errWarning = false;
   // 这里放置你的任务逻辑
+  const interfaceFreq = randomInt(10, 15)
   timer = setInterval(() => {
     getDataList();
-  }, baseConfig.interfaceFreq);
+  }, interfaceFreq * 1000);
 };
 const stopTask = () => {
   console.log("结束任务:");
