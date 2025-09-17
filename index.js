@@ -124,7 +124,7 @@ const getDataList = () => {
 const loopTask = () => {
   getDataList();
   
-  const interfaceFreq = randomInt(7, 15)
+  const interfaceFreq = randomInt(10, 15)
   console.log(`${interfaceFreq}秒后再次检测`)
   timer = setTimeout(() => {
     loopTask()
