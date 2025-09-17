@@ -121,6 +121,16 @@ const getDataList = () => {
     });
 };
 
+const loopTask = () => {
+  getDataList();
+  
+  const interfaceFreq = randomInt(7, 15)
+  console.log(`${interfaceFreq}秒后再次检测`)
+  timer = setTimeout(() => {
+    loopTask()
+  }, interfaceFreq * 1000);
+}
+
 const startTask = () => {
   if (timer) {
     return false;
@@ -128,14 +138,11 @@ const startTask = () => {
   console.log("开始任务:");
   errWarning = false;
   // 这里放置你的任务逻辑
-  const interfaceFreq = randomInt(8, 15)
-  timer = setInterval(() => {
-    getDataList();
-  }, interfaceFreq * 1000);
+  loopTask()
 };
 const stopTask = () => {
   console.log("结束任务:");
-  clearInterval(timer);
+  clearTimeout(timer);
   timer = null;
 };
 
@@ -151,7 +158,7 @@ const createTask = (hour, minute, taskFun) => {
 };
 
 createTask("06", "00", startTask); // 每天开始任务时间
-createTask("22", "00", stopTask); // 每天结束任务时间
+createTask("09", "05", stopTask); // 每天结束任务时间
 startTask();
 
 // wxpusher.sendMessage("南江口-广州4月6号新增加班车");
