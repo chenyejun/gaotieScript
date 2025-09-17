@@ -110,6 +110,8 @@ const getDataList = () => {
           if (initLength > 0 && (canStart || resultList.length > initLength)) {
             wxpusher.sendMessage(`${baseConfig.date}, ${baseConfig.start_station.name} 到 ${baseConfig.end_station.name}新增加班车`);
           }
+        } else {
+          console.error(response)
         }
         clearConsole();
         resolve()
