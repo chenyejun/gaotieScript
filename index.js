@@ -128,7 +128,7 @@ const startTask = () => {
   console.log("开始任务:");
   errWarning = false;
   // 这里放置你的任务逻辑
-  const interfaceFreq = randomInt(10, 15)
+  const interfaceFreq = randomInt(8, 15)
   timer = setInterval(() => {
     getDataList();
   }, interfaceFreq * 1000);
