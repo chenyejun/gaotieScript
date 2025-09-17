@@ -18,7 +18,7 @@ const formatDate = (date) => {
 };
 
 // 自定义范围随机数
-export const randomInt = (min, max) => {
+const randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
