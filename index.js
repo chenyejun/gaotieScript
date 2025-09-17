@@ -21,6 +21,20 @@ const formatDate = (date, hasTime = true) => {
   return result
 };
 
+/**
+ * 将中文字符串转换为 %uXXXX 的 Unicode 编码格式。
+ * 例如："南" -> "%u5357"
+ * @param {string} str - 要转换的中文字符串
+ * @returns {string} - 转换后的 %uXXXX 编码字符串
+ */
+function chineseToUnicode(str) {
+    return str.split('').map(char => {
+        // 获取字符的 Unicode 码点并转为十六进制，长度不足补零
+        const code = char.charCodeAt(0).toString(16).toUpperCase();
+        return '%u' + code.padStart(4, '0');
+    }).join('');
+}
+
 // 自定义范围随机数
 const randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min)
@@ -68,8 +82,8 @@ const getDataList = () => {
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
         "x-requested-with": "XMLHttpRequest",
-        "cookie": `_uab_collina=175566143496125733153601; JSESSIONID=F6228C6D78B5167D016B2F2D4D144A12; _jc_save_toStation=%u5357%u6C5F%u53E3%2CNDQ; _jc_save_wfdc_flag=dc; BIGipServerotn=1524171018.50210.0000; BIGipServerpassport=971505930.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=%u5E7F%u5DDE%u5357%2CIZQ; _jc_save_fromDate=${baseConfig.date}; BIGipServerpool_passport=2917335562.50215.0000; _jc_save_toDate=${formatDate('', false)}`,
-        "Referer": `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=%E5%B9%BF%E5%B7%9E%E5%8D%97,IZQ&ts=%E5%8D%97%E6%B1%9F%E5%8F%A3,NDQ&date=${baseConfig.date}&flag=N,N,Y`
+        "cookie": `_uab_collina=175566143496125733153601; JSESSIONID=F6228C6D78B5167D016B2F2D4D144A12; _jc_save_toStation=${chineseToUnicode(baseConfig.end_station.name)}%2C${baseConfig.end_station.code}; _jc_save_wfdc_flag=dc; BIGipServerotn=1524171018.50210.0000; BIGipServerpassport=971505930.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=${chineseToUnicode(baseConfig.start_station.name)}%2C${baseConfig.start_station.code}; _jc_save_fromDate=${baseConfig.date}; BIGipServerpool_passport=2917335562.50215.0000; _jc_save_toDate=${formatDate('', false)}`,
+        "Referer": `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(baseConfig.start_station.name)},${baseConfig.start_station.code}&ts=${encodeURIComponent(baseConfig.end_station.name)},${baseConfig.end_station.code}&date=${baseConfig.date}&flag=N,N,Y`
       },
     };
     // 发送请求
