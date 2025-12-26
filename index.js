@@ -28,11 +28,11 @@ const formatDate = (date, hasTime = true) => {
  * @returns {string} - 转换后的 %uXXXX 编码字符串
  */
 function chineseToUnicode(str) {
-    return str.split('').map(char => {
-        // 获取字符的 Unicode 码点并转为十六进制，长度不足补零
-        const code = char.charCodeAt(0).toString(16).toUpperCase();
-        return '%u' + code.padStart(4, '0');
-    }).join('');
+  return str.split('').map(char => {
+    // 获取字符的 Unicode 码点并转为十六进制，长度不足补零
+    const code = char.charCodeAt(0).toString(16).toUpperCase();
+    return '%u' + code.padStart(4, '0');
+  }).join('');
 }
 
 // 自定义范围随机数
@@ -56,6 +56,15 @@ const clearConsole = () => {
 let initLength = 0;
 let pauseList = []; // 第一次运行时, 存储暂停发售的班次
 
+let noticeNum = 0
+// 通知超过10次不再通知
+const sendMessage = (msg) => {
+  if (noticeNum <= 10) {
+    wxpusher.sendMessage(msg);
+    noticeNum++
+  }
+}
+
 const getCheci = (str) => {
   // 从加密字符串中提取班次
   const match = str.match(/\|D\d{4,5}\|/);
@@ -67,10 +76,10 @@ const getDataList = () => {
   const checkDate = baseConfig.date
   const startStationName = baseConfig.start_station.name
   const startStationCode = baseConfig.start_station.code
-  
+
   const endStationName = baseConfig.end_station.name
   const endStationCode = baseConfig.end_station.code
-  
+
   console.log(`-------------------------------`)
   console.log(`查询日期：${checkDate}, 行程：${startStationName} 至 ${endStationName}`)
   return new Promise((resolve, reject) => {
@@ -101,7 +110,8 @@ const getDataList = () => {
         const resultList = resData?.result;
         if (resultList) {
           const canStart = resultList.some((x) => {
-            let a = x.includes("有");
+            // let a = x.includes("有");
+            let a = false
             if (pauseList.length > 0) {
               const checi = getCheci(x);
               if (pauseList.includes(checi)) {
@@ -128,14 +138,14 @@ const getDataList = () => {
             console.log('-----------------------')
             console.log('-----------------------')
           }
-          
+
           console.log(
             `时间：${formatDate(Date.now())} | 当前班次总数：${resultList.length}`
           );
-          
+
           console.log("是否开售：", canStart ? "是" : "否");
           if (initLength > 0 && (canStart || resultList.length > initLength)) {
-            wxpusher.sendMessage(`${checkDate}, ${startStationName} 到 ${endStationName}新增加班车`);
+            sendMessage(`${checkDate}, ${startStationName} 到 ${endStationName}新增加班车`);
           }
         } else {
           console.error(response)
@@ -148,7 +158,7 @@ const getDataList = () => {
           // errWarning = true
           // clearInterval(timer)
           // timer = null
-          wxpusher.sendMessage("12306接口异常");
+          sendMessage("12306接口异常");
         }
         console.log(error); // 打印错误信息
         reject()
