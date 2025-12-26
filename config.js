@@ -10,5 +10,6 @@ module.exports = {
   end_station: { // 到达地信息
     name: '南江口',
     code: 'NDQ'
-  }
+  },
+  isOnlyMonitorUnSale: false // 是否仅监听未发售的班次，即忽略当前有车票的班次
 }

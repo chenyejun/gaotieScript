@@ -110,8 +110,7 @@ const getDataList = () => {
         const resultList = resData?.result;
         if (resultList) {
           const canStart = resultList.some((x) => {
-            let a = x.includes("有");
-            // let a = false
+            let a = baseConfig.isOnlyMonitorUnSale ? false : x.includes("有");
             if (pauseList.length > 0) {
               const checi = getCheci(x);
               if (pauseList.includes(checi)) {
